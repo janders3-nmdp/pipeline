@@ -1,6 +1,6 @@
 pipeline
 ========
-This is a prototypical pipeline.  Greater detail on how this works, why it's supposed to work, and much, much more can be found in the wiki at the github page.
+This is a prototypical pipeline.  Greater detail on how this works, why it's supposed to work, and much, much more can be found in the wiki at the nmdp-bioinformatics/dash github page.
 
 [![Build Status](https://travis-ci.org/nmdp-bioinformatics/pipeline.svg?branch=master)](https://travis-ci.org/nmdp-bioinformatics/pipeline)
 
@@ -8,6 +8,8 @@ This is a prototypical pipeline.  Greater detail on how this works, why it's sup
 DESCRIPTION
 ========
 splitter is the master script which figures out what files to work on, and divides the workload up -- into one file per core on the machine.  It then starts process_fastq on each of these files.  Note that it isn't particularly clever about dividing up the workloads.  If there are 100 files, and 4 cores, you get 4 files of 25 lines each -- regardless of sample size.  Still, some parallelization is better than none, right?
+
+If you have only one sample, or only one core, it doesn't split anything for you, just builds a list of all the fastq files it found, and starts process_fastq.bash on them.
 
 USING pipeline
 ========
@@ -36,12 +38,14 @@ CAVEATS
 ========
 This tool requires a fair number of other tools to be installed.  The shell script checks for them, and will try to give you breadcrumbs as to how to solve any of the issues it finds (e.g. where to find bwa).
 
-If your machine/instance has less than 4GB of RAM, you'll want to modify the script so it uses chr6.fa as the reference genomic, install of all_chr.fa.   Make sure those files are indexed.  This script does not do the indexing for you.
+If your machine/instance has less than 4.1 GB of RAM, you'll want to modify the script so it uses chr6.fa as the reference genomic, install of all_chr.fa.   Make sure those files are indexed.  This script does not do the indexing for you.
 
 This is a work in progress, but we welcome improvements and questions.  Please feel free to file issues in github.
 
+This has been primarily tested on Debian-based Linux systems (Ubuntu 14.04.01 LTS, to be exact).  However, we do try to support other Unix-like operating systems, such as Apple OSX.  If you run into issues on your distribution of choice, please file an issue on github.  OSX, mind you, has some VERY old shell utilities, so it's still a bit prototypical.
+
 DEBUGGING
 ========
-Elapsed times, STDOUT and STDERR messages are stored in files named timedata.[0-9]+ -- that is, timedata, followed by a numeric string derived from the PID of the splitter.bash script. 
+Elapsed times, STDOUT and STDERR messages are stored in files named timedata.* -- that is, timedata, followed by a string derived from the PID of the splitter.bash script (or, on OSX, some variant of x[a-z][a-z]. 
 
-All timedata files may safely be removed after  run validation.
+All timedata files may safely be removed after run validation.
